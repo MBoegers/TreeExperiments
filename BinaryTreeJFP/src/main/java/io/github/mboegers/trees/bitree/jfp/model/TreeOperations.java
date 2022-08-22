@@ -14,10 +14,7 @@ final class TreeOperations {
             case SubTree(SubTree l, Integer v, EmptyTree r) when v.equals(value) -> l;
             case SubTree(EmptyTree l, Integer v, SubTree r) when v.equals(value) -> r;
             case SubTree(SubTree l, Integer v, SubTree r) when v.equals(value)-> insertSubTree(r, l);
-            default -> {
-                System.err.println("🎶And I said to myself 'What the fuck?'🎶");
-                yield tree;
-            }
+            case SubTree subTree -> subTree;
         };
     }
 
