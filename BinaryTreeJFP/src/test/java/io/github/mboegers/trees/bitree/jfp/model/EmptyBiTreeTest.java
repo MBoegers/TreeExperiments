@@ -8,13 +8,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class EmptyTreeTest {
+class EmptyBiTreeTest {
 
     @Test
     void create() {
-        Tree t = new EmptyTree();
+        BiTree t = new EmptyBiTree();
 
-        assertThat(t).isInstanceOf(EmptyTree.class);
+        assertThat(t).isInstanceOf(EmptyBiTree.class);
     }
 
     @Nested
@@ -23,7 +23,7 @@ class EmptyTreeTest {
         @NullSource
         @ValueSource(ints = {Integer.MIN_VALUE, -34, -3, 33, 5, -8, Integer.MAX_VALUE})
         void empty(Integer value) {
-            var emptyTree = new EmptyTree();
+            var emptyTree = new EmptyBiTree();
 
             var resultingTree = TreeOperations.delete(emptyTree, value);
 
@@ -35,8 +35,8 @@ class EmptyTreeTest {
     class Insert {
         @Test
         void insertRoot() {
-            var emptyTree = new EmptyTree();
-            var expectedTree = new SubTree(new EmptyTree(), 3, new EmptyTree());
+            var emptyTree = new EmptyBiTree();
+            var expectedTree = new SubBiTree(new EmptyBiTree(), 3, new EmptyBiTree());
 
             var containingTree = TreeOperations.delete(emptyTree, 3);
 
@@ -50,7 +50,7 @@ class EmptyTreeTest {
         @NullSource
         @ValueSource(ints = {Integer.MIN_VALUE, -34, -3, 33, 5, -8, Integer.MAX_VALUE})
         void empty(Integer value) {
-            var emptyTree = new EmptyTree();
+            var emptyTree = new EmptyBiTree();
 
             assertThat(TreeOperations.contains(emptyTree, value)).isFalse();
         }

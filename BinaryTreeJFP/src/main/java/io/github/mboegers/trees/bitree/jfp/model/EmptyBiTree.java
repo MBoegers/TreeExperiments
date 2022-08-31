@@ -1,9 +1,12 @@
 package io.github.mboegers.trees.bitree.jfp.model;
 
-final class EmptyTree implements Tree {
+/**
+ * Represent a Tree containing nether a value nor children
+ */
+final class EmptyBiTree implements BiTree {
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof EmptyTree;
+        return obj instanceof EmptyBiTree;
     }
 
     @Override

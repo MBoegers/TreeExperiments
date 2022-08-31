@@ -3,27 +3,25 @@ package io.github.mboegers.trees.bitree.oo.model;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class EmptyTreeTest {
+class EmptyBiTreeTest {
 
     @Test
     void create() {
-        Tree t = new EmptyTree();
+        BiTree t = new EmptyBiTree();
 
-        assertThat(t).isInstanceOf(EmptyTree.class);
+        assertThat(t).isInstanceOf(EmptyBiTree.class);
     }
 
     @Nested
     class Delete {
         @ParameterizedTest
-        @NullSource
         @ValueSource(ints = {Integer.MIN_VALUE, -34, -3, 33, 5, -8, Integer.MAX_VALUE})
         void empty(Integer value) {
-            var emptyTree = new EmptyTree();
+            var emptyTree = new EmptyBiTree();
 
             var resultingTree = emptyTree.delete(value);
 
@@ -35,8 +33,8 @@ class EmptyTreeTest {
     class Insert {
         @Test
         void insertRoot() {
-            var emptyTree = new EmptyTree();
-            var expectedTree = new SubTree(new EmptyTree(), 3, new EmptyTree());
+            var emptyTree = new EmptyBiTree();
+            var expectedTree = new SubBiTree(new EmptyBiTree(), 3, new EmptyBiTree());
 
             var containingTree = emptyTree.insert(3);
 
@@ -47,10 +45,9 @@ class EmptyTreeTest {
     @Nested
     class Contains {
         @ParameterizedTest
-        @NullSource
         @ValueSource(ints = {Integer.MIN_VALUE, -34, -3, 33, 5, -8, Integer.MAX_VALUE})
         void empty(Integer value) {
-            var emptyTree = new EmptyTree();
+            var emptyTree = new EmptyBiTree();
 
             assertThat(emptyTree.contains(value)).isFalse();
         }

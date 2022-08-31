@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static io.github.mboegers.trees.bitree.jfp.model.TreeOperations.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SubTreeTest {
+class SubBiTreeTest {
 
     @Nested
     class Creation {
@@ -18,51 +18,51 @@ class SubTreeTest {
         class Leaf {
             @Test
             void allArgsConstructor() {
-                var newTree = new SubTree(new EmptyTree(), 3, new EmptyTree());
-                var expected = new SubTree(new EmptyTree(), 3, new EmptyTree());
+                var newTree = new SubBiTree(new EmptyBiTree(), 3, new EmptyBiTree());
+                var expected = new SubBiTree(new EmptyBiTree(), 3, new EmptyBiTree());
 
                 assertThat(newTree).isEqualTo(expected);
             }
 
             @Test
             void withLeftTreeConstructor() {
-                var newTree = new SubTree(new EmptyTree(), 3);
-                var expected = new SubTree(new EmptyTree(), 3, new EmptyTree());
+                var newTree = new SubBiTree(new EmptyBiTree(), 3);
+                var expected = new SubBiTree(new EmptyBiTree(), 3, new EmptyBiTree());
 
                 assertThat(newTree).isEqualTo(expected);
             }
 
             @Test
             void withRightTreeConstructor() {
-                var newTree = new SubTree(3, new EmptyTree());
-                var expected = new SubTree(new EmptyTree(), 3, new EmptyTree());
+                var newTree = new SubBiTree(3, new EmptyBiTree());
+                var expected = new SubBiTree(new EmptyBiTree(), 3, new EmptyBiTree());
 
                 assertThat(newTree).isEqualTo(expected);
             }
         }
 
         @Nested
-        class FullTree {
+        class FullBiTree {
             @Test
             void allArgsConstructor() {
-                var newTree = new SubTree(new SubTree(2), 3, new SubTree(5));
-                var expected = new SubTree(new SubTree(new EmptyTree(), 2, new EmptyTree()), 3, new SubTree(new EmptyTree(), 5, new EmptyTree()));
+                var newTree = new SubBiTree(new SubBiTree(2), 3, new SubBiTree(5));
+                var expected = new SubBiTree(new SubBiTree(new EmptyBiTree(), 2, new EmptyBiTree()), 3, new SubBiTree(new EmptyBiTree(), 5, new EmptyBiTree()));
 
                 assertThat(newTree).isEqualTo(expected);
             }
 
             @Test
             void withLeftTreeConstructor() {
-                var newTree = new SubTree(new SubTree(2), 3);
-                var expected = new SubTree(new SubTree(2), 3, new EmptyTree());
+                var newTree = new SubBiTree(new SubBiTree(2), 3);
+                var expected = new SubBiTree(new SubBiTree(2), 3, new EmptyBiTree());
 
                 assertThat(newTree).isEqualTo(expected);
             }
 
             @Test
             void withRightTreeConstructor() {
-                var newTree = new SubTree(3, new SubTree(4));
-                var expected = new SubTree(new EmptyTree(), 3, new SubTree(4));
+                var newTree = new SubBiTree(3, new SubBiTree(4));
+                var expected = new SubBiTree(new EmptyBiTree(), 3, new SubBiTree(4));
 
                 assertThat(newTree).isEqualTo(expected);
             }
@@ -90,8 +90,8 @@ class SubTreeTest {
              */
 
 
-            var containingTree = new SubTree(new SubTree(new SubTree(new SubTree(1), 5, new SubTree(7)), 10, new SubTree(new SubTree(11, new SubTree(14)), 15, new SubTree(20))), 100, new SubTree(110));
-            var expected = new SubTree(new SubTree(new SubTree(1), 5, new SubTree(7, new SubTree(new SubTree(11, new SubTree(14)), 15, new SubTree(20)))), 100, new SubTree(110));
+            var containingTree = new SubBiTree(new SubBiTree(new SubBiTree(new SubBiTree(1), 5, new SubBiTree(7)), 10, new SubBiTree(new SubBiTree(11, new SubBiTree(14)), 15, new SubBiTree(20))), 100, new SubBiTree(110));
+            var expected = new SubBiTree(new SubBiTree(new SubBiTree(1), 5, new SubBiTree(7, new SubBiTree(new SubBiTree(11, new SubBiTree(14)), 15, new SubBiTree(20)))), 100, new SubBiTree(110));
 
             var actual = delete(containingTree, 10);
 
@@ -103,8 +103,8 @@ class SubTreeTest {
             @ParameterizedTest
             @ValueSource(ints = {Integer.MIN_VALUE, -34, -3, 33, 5, -8, Integer.MAX_VALUE})
             void hasNoChildContaining(Integer value) {
-                var containingTree = new SubTree(new EmptyTree(), value, new EmptyTree());
-                var expected = new EmptyTree();
+                var containingTree = new SubBiTree(new EmptyBiTree(), value, new EmptyBiTree());
+                var expected = new EmptyBiTree();
 
                 var actual = delete(containingTree, value);
 
@@ -114,8 +114,8 @@ class SubTreeTest {
             @ParameterizedTest
             @ValueSource(ints = {Integer.MIN_VALUE, -34, -3, 33, 5, -8, Integer.MAX_VALUE})
             void hasNoChildNotContaining(Integer value) {
-                var containingTree = new SubTree(new EmptyTree(), 13, new EmptyTree());
-                var expected = new SubTree(new EmptyTree(), 13, new EmptyTree());
+                var containingTree = new SubBiTree(new EmptyBiTree(), 13, new EmptyBiTree());
+                var expected = new SubBiTree(new EmptyBiTree(), 13, new EmptyBiTree());
 
                 var actual = delete(containingTree, value);
 
@@ -128,8 +128,8 @@ class SubTreeTest {
             @ParameterizedTest
             @ValueSource(ints = {Integer.MIN_VALUE, -34, -3, 33, 5, -8, Integer.MAX_VALUE})
             void containingValueAndHasLeftChild(Integer value) {
-                var containingTree = new SubTree(new SubTree(12), value);
-                var expected = new SubTree(12);
+                var containingTree = new SubBiTree(new SubBiTree(12), value);
+                var expected = new SubBiTree(12);
 
                 var actual = delete(containingTree, value);
 
@@ -140,8 +140,8 @@ class SubTreeTest {
             @ParameterizedTest
             @ValueSource(ints = {Integer.MIN_VALUE, -34, -3, 33, 5, -8, Integer.MAX_VALUE})
             void notContainingValueAndHasLeftChild(Integer value) {
-                var containingTree = new SubTree(new SubTree(12), 13);
-                var expected = new SubTree(new SubTree(12), 13);
+                var containingTree = new SubBiTree(new SubBiTree(12), 13);
+                var expected = new SubBiTree(new SubBiTree(12), 13);
 
                 var actual = delete(containingTree, value);
 
@@ -154,8 +154,8 @@ class SubTreeTest {
             @ParameterizedTest
             @ValueSource(ints = {Integer.MIN_VALUE, -34, -3, 33, 5, -8, Integer.MAX_VALUE})
             void containingValueAndHasRightChild(Integer value) {
-                var containingTree = new SubTree(new EmptyTree(), value, new SubTree(17));
-                var expected = new SubTree(17);
+                var containingTree = new SubBiTree(new EmptyBiTree(), value, new SubBiTree(17));
+                var expected = new SubBiTree(17);
 
                 var actual = delete(containingTree, value);
 
@@ -165,8 +165,8 @@ class SubTreeTest {
             @ParameterizedTest
             @ValueSource(ints = {Integer.MIN_VALUE, -34, -3, 33, 5, -8, Integer.MAX_VALUE})
             void notContainingValueAndHasRightChild(Integer value) {
-                var containingTree = new SubTree(new EmptyTree(), 13, new SubTree(17));
-                var expected = new SubTree(new EmptyTree(), 13, new SubTree(17));
+                var containingTree = new SubBiTree(new EmptyBiTree(), 13, new SubBiTree(17));
+                var expected = new SubBiTree(new EmptyBiTree(), 13, new SubBiTree(17));
 
                 var actual = delete(containingTree, value);
 
@@ -179,8 +179,8 @@ class SubTreeTest {
             @ParameterizedTest
             @ValueSource(ints = {Integer.MIN_VALUE, -34, -3, 33, 5, -8})
             void leftChildContainsValue(Integer value) {
-                var tree = new SubTree(new SubTree(value), 100, new SubTree(110));
-                var expected = new SubTree(new EmptyTree(), 100, new SubTree(110));
+                var tree = new SubBiTree(new SubBiTree(value), 100, new SubBiTree(110));
+                var expected = new SubBiTree(new EmptyBiTree(), 100, new SubBiTree(110));
 
                 var actual = delete(tree, value);
 
@@ -190,8 +190,8 @@ class SubTreeTest {
             @ParameterizedTest
             @ValueSource(ints = {-34, -3, 33, 5, -8, Integer.MAX_VALUE})
             void rightChildContainsValue(Integer value) {
-                var tree = new SubTree(new SubTree(-90), -100, new SubTree(value));
-                var expected = new SubTree(new SubTree(-90), -100, new EmptyTree());
+                var tree = new SubBiTree(new SubBiTree(-90), -100, new SubBiTree(value));
+                var expected = new SubBiTree(new SubBiTree(-90), -100, new EmptyBiTree());
 
                 var actual = delete(tree, value);
 
@@ -205,8 +205,8 @@ class SubTreeTest {
 
         @Test
         void insertLeft() {
-            var flatTree = new SubTree(7);
-            var expectedTree = new SubTree(new SubTree(3), 7, new EmptyTree());
+            var flatTree = new SubBiTree(7);
+            var expectedTree = new SubBiTree(new SubBiTree(3), 7, new EmptyBiTree());
 
             var leftHeavyTree = insert(flatTree, 3);
 
@@ -215,8 +215,8 @@ class SubTreeTest {
 
         @Test
         void insertRight() {
-            var flatTree = new SubTree(7);
-            var expectedTree = new SubTree(new EmptyTree(), 7, new SubTree(10));
+            var flatTree = new SubBiTree(7);
+            var expectedTree = new SubBiTree(new EmptyBiTree(), 7, new SubBiTree(10));
 
             var leftHeavyTree = insert(flatTree, 10);
 
@@ -225,8 +225,8 @@ class SubTreeTest {
 
         @Test
         void insertBothSmallFirst() {
-            var flatTree = new SubTree(6);
-            var expectedTree = new SubTree(new SubTree(2), 6, new SubTree(11));
+            var flatTree = new SubBiTree(6);
+            var expectedTree = new SubBiTree(new SubBiTree(2), 6, new SubBiTree(11));
 
             var smallFirst = insert(insert(flatTree, 2), 11);
 
@@ -235,8 +235,8 @@ class SubTreeTest {
 
         @Test
         void insertBothBigFirst() {
-            var flatTree = new SubTree(6);
-            var expectedTree = new SubTree(new SubTree(2), 6, new SubTree(11));
+            var flatTree = new SubBiTree(6);
+            var expectedTree = new SubBiTree(new SubBiTree(2), 6, new SubBiTree(11));
 
             var bigFirst = insert(insert(flatTree, 11), 2);
 
@@ -259,9 +259,9 @@ class SubTreeTest {
              *                  \
              *                  14
              */
-            var expected = new SubTree(new SubTree(new SubTree(new SubTree(1), 5, new SubTree(7)), 10, new SubTree(new SubTree(11, new SubTree(14)), 15, new SubTree(20))), 100, new SubTree(110));
+            var expected = new SubBiTree(new SubBiTree(new SubBiTree(new SubBiTree(1), 5, new SubBiTree(7)), 10, new SubBiTree(new SubBiTree(11, new SubBiTree(14)), 15, new SubBiTree(20))), 100, new SubBiTree(110));
 
-            var insertedTree = insert(insert(insert(insert(insert(insert(insert(insert(insert(insert(new EmptyTree(),
+            var insertedTree = insert(insert(insert(insert(insert(insert(insert(insert(insert(insert(new EmptyBiTree(),
                     100), 110), 10), 5), 15), 1), 11), 7), 20), 14);
 
             assertThat(insertedTree).isEqualTo(expected);
@@ -269,8 +269,8 @@ class SubTreeTest {
 
         @Test
         void insertDuplicate() {
-            var baseTree = new SubTree(5);
-            var expected = new SubTree(new SubTree(2), 5);
+            var baseTree = new SubBiTree(5);
+            var expected = new SubBiTree(new SubBiTree(2), 5);
 
             var actual = insert(insert(baseTree, 2), 2);
 
@@ -278,58 +278,58 @@ class SubTreeTest {
         }
 
         @Nested
-        class SubTreeInsert {
+        class SubBiTreeInsert {
             @Test
             void insertFullSubTree() {
-                var baseTree = new SubTree(new SubTree(4), 5, new SubTree(6));
-                var subTree = new SubTree(new SubTree(7), 8, new SubTree(9));
-                var expected = new SubTree(new SubTree(4), 5, new SubTree(6, new SubTree(new SubTree(7), 8, new SubTree(9))));
+                var baseTree = new SubBiTree(new SubBiTree(4), 5, new SubBiTree(6));
+                var subTree = new SubBiTree(new SubBiTree(7), 8, new SubBiTree(9));
+                var expected = new SubBiTree(new SubBiTree(4), 5, new SubBiTree(6, new SubBiTree(new SubBiTree(7), 8, new SubBiTree(9))));
 
-                var actual = insertSubTree(baseTree, subTree);
+                var actual = insertTreeRecursive(baseTree, subTree);
 
                 assertThat(actual).isEqualTo(expected);
             }
 
             @Test
             void insertEmptySubTree() {
-                var baseTree = new SubTree(new SubTree(4), 5, new SubTree(6));
-                var subTree = new EmptyTree();
-                var expected = new SubTree(new SubTree(4), 5, new SubTree(6));
+                var baseTree = new SubBiTree(new SubBiTree(4), 5, new SubBiTree(6));
+                var subTree = new EmptyBiTree();
+                var expected = new SubBiTree(new SubBiTree(4), 5, new SubBiTree(6));
 
-                var actual = insertSubTree(baseTree, subTree);
+                var actual = insertTreeRecursive(baseTree, subTree);
 
                 assertThat(actual).isEqualTo(expected);
             }
 
             @Test
             void insertIntoEmptySubTree() {
-                var baseTree = new EmptyTree();
-                var subTree = new SubTree(new SubTree(7), 8, new SubTree(9));
-                var expected = new SubTree(new SubTree(7), 8, new SubTree(9));
+                var baseTree = new EmptyBiTree();
+                var subTree = new SubBiTree(new SubBiTree(7), 8, new SubBiTree(9));
+                var expected = new SubBiTree(new SubBiTree(7), 8, new SubBiTree(9));
 
-                var actual = insertSubTree(baseTree, subTree);
+                var actual = insertTreeRecursive(baseTree, subTree);
 
                 assertThat(actual).isEqualTo(expected);
             }
 
             @Test
             void insertSimpleSubTree() {
-                var baseTree = new SubTree(new SubTree(4), 5, new SubTree(6));
-                var subTree = new SubTree(8);
-                var expected = new SubTree(new SubTree(4), 5, new SubTree(6, new SubTree(8)));
+                var baseTree = new SubBiTree(new SubBiTree(4), 5, new SubBiTree(6));
+                var subTree = new SubBiTree(8);
+                var expected = new SubBiTree(new SubBiTree(4), 5, new SubBiTree(6, new SubBiTree(8)));
 
-                var actual = insertSubTree(baseTree, subTree);
+                var actual = insertTreeRecursive(baseTree, subTree);
 
                 assertThat(actual).isEqualTo(expected);
             }
 
             @Test
             void insertIntoSimpleSubTree() {
-                var baseTree = new SubTree(5);
-                var subTree = new SubTree(new SubTree(7), 8, new SubTree(9));
-                var expected = new SubTree(5, new SubTree(new SubTree(7), 8, new SubTree(9)));
+                var baseTree = new SubBiTree(5);
+                var subTree = new SubBiTree(new SubBiTree(7), 8, new SubBiTree(9));
+                var expected = new SubBiTree(5, new SubBiTree(new SubBiTree(7), 8, new SubBiTree(9)));
 
-                var actual = insertSubTree(baseTree, subTree);
+                var actual = insertTreeRecursive(baseTree, subTree);
 
                 assertThat(actual).isEqualTo(expected);
             }
@@ -345,7 +345,7 @@ class SubTreeTest {
             @NullSource
             @ValueSource(ints = {Integer.MIN_VALUE, -34, -3, 33, -8, Integer.MAX_VALUE})
             void doesNotContain(Integer notA5) {
-                var treeContaining5 = new SubTree(5);
+                var treeContaining5 = new SubBiTree(5);
 
                 assertThat(TreeOperations.contains(treeContaining5, notA5)).isFalse();
             }
@@ -353,7 +353,7 @@ class SubTreeTest {
             @ParameterizedTest
             @ValueSource(ints = {Integer.MIN_VALUE, -34, -3, 33, -8, Integer.MAX_VALUE})
             void contains(Integer value) {
-                var valueContainTree = new SubTree(value);
+                var valueContainTree = new SubBiTree(value);
 
                 assertThat(TreeOperations.contains(valueContainTree, value)).isTrue();
             }
@@ -365,28 +365,28 @@ class SubTreeTest {
             @NullSource
             @ValueSource(ints = {Integer.MIN_VALUE, -34, -3, 33, -8, Integer.MAX_VALUE})
             void doesNotContain(Integer notA5) {
-                var treeContaining5 = new SubTree(new SubTree(5), 8, new SubTree(10));
+                var treeContaining5 = new SubBiTree(new SubBiTree(5), 8, new SubBiTree(10));
 
                 assertThat(contains(treeContaining5, notA5)).isFalse();
             }
 
             @Test
             void containsRoot() {
-                var valueContainTree = new SubTree(new SubTree(3), 5, new SubTree(8));
+                var valueContainTree = new SubBiTree(new SubBiTree(3), 5, new SubBiTree(8));
 
                 assertThat(contains(valueContainTree, 5)).isTrue();
             }
 
             @Test
             void containsLeft() {
-                var valueContainTree = new SubTree(new SubTree(5), 7, new SubTree(8));
+                var valueContainTree = new SubBiTree(new SubBiTree(5), 7, new SubBiTree(8));
 
                 assertThat(contains(valueContainTree, 5)).isTrue();
             }
 
             @Test
             void containsRight() {
-                var valueContainTree = new SubTree(new SubTree(3), 4, new SubTree(5));
+                var valueContainTree = new SubBiTree(new SubBiTree(3), 4, new SubBiTree(5));
 
                 assertThat(contains(valueContainTree, 5)).isTrue();
             }
