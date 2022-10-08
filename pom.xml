@@ -13,5 +13,7 @@
     <modules>
         <module>BinaryTreeJFP</module>
         <module>BinaryTreeOO</module>
+        <module>SingleLinkedListOO</module>
+        <module>SingleLinkedListJFP</module>
     </modules>
 </project>
