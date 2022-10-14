@@ -27,7 +27,6 @@ public class SingleLinkedListOperations {
      */
     static <T> T head(SingleLinkedList<T> list) {
         return switch (list) {
-            case null -> throw new NullPointerException("List is null");
             case SingleLinkedList.Empty<T> __ -> throw new IndexOutOfBoundsException("List is empty!");
             case SingleLinkedList.Element<T> e -> e.value();
         };
@@ -38,15 +37,17 @@ public class SingleLinkedListOperations {
      * <ul>
      *     <li><code>tail([1,2,3]) := [2,3]</code></li>
      *     <li><code>tail([]) := []</code></li>
+     *     <li><code>tail(null) := []</code></li>
      * </ul>
      *
      * @return list without the first element
      */
     static <T> SingleLinkedList<T> tail(SingleLinkedList<T> list) {
         return switch (list) {
+            // case null, SingleLinkedList.Empty<T> e -> e; // geht führt aber zu einem null als return!
             case null -> new SingleLinkedList.Empty<>();
             case SingleLinkedList.Empty<T> e -> e;
-            case SingleLinkedList.Element<T> e -> e.next();
+            case SingleLinkedList.Element<T>(T __,SingleLinkedList<T> next) -> next;
         };
     }
 
@@ -64,8 +65,8 @@ public class SingleLinkedListOperations {
     static <T> boolean contains(T value, SingleLinkedList<T> list) {
         return switch (list) {
             case null, SingleLinkedList.Empty<T> __ -> false;
-            case SingleLinkedList.Element<T> e when Objects.equals(value, e.value()) -> true;
-            case SingleLinkedList.Element<T> e -> contains(value, e.next());
+            case SingleLinkedList.Element<T>(T v,SingleLinkedList<T> __)when Objects.equals(value, v) -> true;
+            case SingleLinkedList.Element<T>(T __,SingleLinkedList<T> next) -> contains(value, next);
         };
     }
 }

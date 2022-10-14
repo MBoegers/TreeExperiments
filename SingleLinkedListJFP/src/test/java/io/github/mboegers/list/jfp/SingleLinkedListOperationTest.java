@@ -8,10 +8,19 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class SingleLinkedListOperationTest {
+class SingleLinkedListOperationTest {
 
     @Nested
     class Tail {
+        @Test
+        void nullList() {
+            SingleLinkedList<Integer> list = null;
+
+            var tail = SingleLinkedListOperations.tail(list);
+
+            assertThat(tail).isEqualTo(SingleLinkedListOperations.of());
+        }
+
         @Test
         void empty() {
             var list = SingleLinkedListOperations.of();
@@ -45,6 +54,14 @@ public class SingleLinkedListOperationTest {
     @Nested
     class Head {
         @Test
+        void nullList() {
+            SingleLinkedList<Integer> list = null;
+
+            assertThatThrownBy(() -> SingleLinkedListOperations.head(list))
+                    .isInstanceOf(NullPointerException.class);
+        }
+
+        @Test
         void empty() {
             var list = SingleLinkedListOperations.of();
 
@@ -75,6 +92,16 @@ public class SingleLinkedListOperationTest {
 
     @Nested
     class Contains {
+        @ParameterizedTest
+        @ValueSource(ints = {1, 3, 5, 8374, 44})
+        void nullList(int value) {
+            SingleLinkedList<Integer> list = null;
+
+            var contains = SingleLinkedListOperations.contains(value, list);
+
+            assertThat(contains).isFalse();
+        }
+
         @ParameterizedTest
         @ValueSource(ints = {1, 3, 5, 8374, 44})
         void empty(int value) {
